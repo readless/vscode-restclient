@@ -2,9 +2,11 @@
 
 import { CancellationToken, CodeLens, CodeLensProvider, Command, Range, TextDocument } from 'vscode';
 import * as Constants from '../common/constants';
+import { logTime } from '../utils/logTimeCostDecorator';
 import { Selector } from '../utils/selector';
 
 export class HttpCodeLensProvider implements CodeLensProvider {
+    @logTime("ShowSendRequestButton")
     public provideCodeLenses(document: TextDocument, token: CancellationToken): Promise<CodeLens[]> {
         let blocks: CodeLens[] = [];
         let lines: string[] = document.getText().split(Constants.LineSplitterRegex);

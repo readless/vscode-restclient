@@ -9,6 +9,7 @@ import { HttpResponse } from '../models/httpResponse';
 import { PreviewOption } from '../models/previewOption';
 import { trace } from '../utils/decorator';
 import { disposeAll } from '../utils/dispose';
+import {logTime} from '../utils/logTimeCostDecorator';
 import { MimeUtility } from '../utils/mimeUtility';
 import { isJSONString } from '../utils/misc';
 import {ResponseProcessors} from '../utils/processor/responseProcessors';
@@ -46,6 +47,7 @@ export class HttpResponseWebview extends BaseWebview {
         this.context.subscriptions.push(commands.registerCommand('rest-client.unfold-response', () => this.unfoldResponseBody()));
     }
 
+    @logTime("ResponseRender")
     public async render(response: HttpResponse, column: ViewColumn) {
         let panel: WebviewPanel;
         if (this.settings.showResponseInDifferentTab || this.panels.length === 0) {

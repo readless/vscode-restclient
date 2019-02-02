@@ -2,10 +2,12 @@
 
 import { CancellationToken, CodeLens, CodeLensProvider, Command, Location, Range, TextDocument } from 'vscode';
 import * as Constants from '../common/constants';
+import { logTime } from '../utils/logTimeCostDecorator';
 import { Selector } from '../utils/selector';
 import { VariableUtility } from '../utils/variableUtility';
 
 export class CustomVariableReferencesCodeLensProvider implements CodeLensProvider {
+    @logTime("ShowVariableInfoButton")
     public provideCodeLenses(document: TextDocument, token: CancellationToken): Promise<CodeLens[]> {
         let blocks: CodeLens[] = [];
         let lines: string[] = document.getText().split(Constants.LineSplitterRegex);
