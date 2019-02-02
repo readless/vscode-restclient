@@ -30,7 +30,7 @@ pre .hljs-comment {
 }
 
 .vscode-light pre .hljs-attr {
-  color: #eab700;
+  color: #4080D0;
 }
 
 .vscode-dark pre .hljs-attr {
@@ -209,12 +209,12 @@ code .line:before {
 }
 
 a {
-  color: #4080D0;
+  color: #718c00;
   text-decoration: none;
 }
 
 a:hover {
-  color: #4080D0;
+  color: #718c00;
   text-decoration: underline;
 }
 
