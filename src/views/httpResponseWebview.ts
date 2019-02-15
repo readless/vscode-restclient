@@ -12,7 +12,6 @@ import { disposeAll } from '../utils/dispose';
 import {logTime} from '../utils/logTimeCostDecorator';
 import { MimeUtility } from '../utils/mimeUtility';
 import { isJSONString } from '../utils/misc';
-import {ResponseProcessors} from '../utils/processor/responseProcessors';
 import { ResponseFormatUtility } from '../utils/responseFormatUtility';
 import { BaseWebview } from './baseWebview';
 
@@ -144,11 +143,10 @@ export class HttpResponseWebview extends BaseWebview {
     </head>
     <body>
         <div>
-            ${this.processByProcessors(
-                this.settings.disableAddingHrefLinkForLargeResponse && response.bodySizeInBytes > this.settings.largeResponseBodySizeLimitInMB * 1024 * 1024
+            ${this.settings.disableAddingHrefLinkForLargeResponse && response.bodySizeInBytes > this.settings.largeResponseBodySizeLimitInMB * 1024 * 1024
                 ? innerHtml
                 : this.addUrlLinks(innerHtml
-            ))}
+            )}
             <a id="scroll-to-top" role="button" aria-label="scroll to top" onclick="window.scroll(0,0)"><span class="icon"></span></a>
         </div>
         <script type="text/javascript" src="${this.scriptFilePath}" charset="UTF-8"></script>
@@ -278,10 +276,6 @@ ${HttpResponseWebview.formatHeaders(response.headers)}`;
                 return match;
             }
         });
-    }
-
-    private processByProcessors(innerHtml: string): string {
-        return ResponseProcessors.process(innerHtml);
     }
 
     private addUrlLinks(innerHtml: string) {

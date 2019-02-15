@@ -16,8 +16,8 @@ export class TransformDateProcessor implements ResponseProcessor {
         }
         return TransformDateProcessor._instance;
     }
-    public process(responseHtmlBody: string): string {
-        return responseHtmlBody.replace(this.dateRegExp, function (str) {
+    public process(response: string): string {
+        return response.replace(this.dateRegExp, function (str) {
              return moment(Number(str.substr(6, 13))).format("YYYY-MM-DD HH:mm:ss.SSS");
         });
     }

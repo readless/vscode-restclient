@@ -3,19 +3,21 @@
 import { logTime } from '../logTimeCostDecorator';
 import {ResponseProcessor} from './responseProcessor';
 import {TransformDateProcessor} from './transformDateProcessor';
+import { TransformJsonStrProcessor } from './transformJsonStrProcessor';
 
 export class ResponseProcessors {
 
-    private static readonly processors: [ResponseProcessor] = [
-        TransformDateProcessor.Instance
+    private static readonly processors: ResponseProcessor[] = [
+        TransformDateProcessor.Instance,
+        TransformJsonStrProcessor.Instance
     ];
 
     @logTime("ResponseProcess")
-    public static process(responseHtmlBody: string): string {
+    public static process(response: string): string {
         for (const processor of ResponseProcessors.processors) {
-            responseHtmlBody = processor.process(responseHtmlBody);
+            response = processor.process(response);
         }
-        return responseHtmlBody;
+        return response;
     }
 
 }

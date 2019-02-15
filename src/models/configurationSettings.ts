@@ -35,6 +35,7 @@ export interface IRestClientSettings {
     addRequestBodyLineIndentationAroundBrackets: boolean;
     decodeEscapedUnicodeCharacters: boolean;
     logLevel: LogLevel;
+    expandJsonStrAsJsonObject: boolean;
 }
 
 export class RestClientSettings implements IRestClientSettings {
@@ -66,6 +67,7 @@ export class RestClientSettings implements IRestClientSettings {
     public addRequestBodyLineIndentationAroundBrackets: boolean;
     public decodeEscapedUnicodeCharacters: boolean;
     public logLevel: LogLevel;
+    public expandJsonStrAsJsonObject: boolean;
 
     private readonly brackets: CharacterPair[];
 
@@ -131,6 +133,8 @@ export class RestClientSettings implements IRestClientSettings {
         this.decodeEscapedUnicodeCharacters = restClientSettings.get<boolean>('decodeEscapedUnicodeCharacters', false);
         this.logLevel = ParseLogLevelStr(restClientSettings.get<string>('logLevel', 'error'));
         languages.setLanguageConfiguration('http', { brackets: this.addRequestBodyLineIndentationAroundBrackets ? this.brackets : [] });
+
+        this.expandJsonStrAsJsonObject = restClientSettings.get<boolean>('expandJsonStrAsJsonObject', true);
 
         const httpSettings = workspace.getConfiguration("http");
         this.proxy = httpSettings.get<string>('proxy', undefined);

@@ -2,7 +2,7 @@
   "name": "rest-client",
   "displayName": "REST Client",
   "description": "REST Client for Visual Studio Code",
-  "version": "1.0.2",
+  "version": "1.1.11",
   "publisher": "humao",
   "author": {
     "name": "Huachao Mao",
@@ -572,6 +572,12 @@
           "default": "error",
           "scope": "resource",
           "description": "The verbosity of logging in the REST output panel"
+        },
+        "rest-client.expandJsonStrAsJsonObject": {
+          "type": "boolean",
+          "default": true,
+          "scope": "resource",
+          "description": "Expand JsonStr As JsonObject."
         }
       }
     },

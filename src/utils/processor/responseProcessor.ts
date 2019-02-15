@@ -1,5 +1,5 @@
 'use strict';
 
 export interface ResponseProcessor {
-    process(responseHtmlBody: string): string;
+    process(response: string): string;
 }

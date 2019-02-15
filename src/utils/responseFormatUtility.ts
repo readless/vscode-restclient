@@ -5,6 +5,7 @@ import * as os from 'os';
 import { window } from 'vscode';
 import { MimeUtility } from './mimeUtility';
 import { isJSONString } from './misc';
+import { ResponseProcessors } from './processor/responseProcessors';
 const pd = require('pretty-data').pd;
 
 export class ResponseFormatUtility {
@@ -22,6 +23,7 @@ export class ResponseFormatUtility {
     };
 
     public static formatBody(body: string, contentType: string, suppressValidation: boolean): string {
+        body = ResponseProcessors.process(body);
         if (contentType) {
             if (MimeUtility.isJSON(contentType)) {
                 if (isJSONString(body)) {
