@@ -5,6 +5,7 @@ import { DurationInputArg2, Moment, utc } from 'moment';
 import { Clipboard, commands, env, QuickPickItem, QuickPickOptions, TextDocument, Uri, window } from 'vscode';
 import * as Constants from '../../common/constants';
 import { EnvironmentController } from '../../controllers/environmentController';
+import { RestClientSettings } from '../../models/configurationSettings';
 import { HttpRequest } from '../../models/httpRequest';
 import { ResolveErrorMessage, ResolveWarningMessage } from '../../models/httpVariableResolveResult';
 import { VariableType } from '../../models/variableType';
@@ -32,6 +33,8 @@ export class SystemVariableProvider implements HttpVariableProvider {
     private readonly aadRegex: RegExp = new RegExp(`\\s*\\${Constants.AzureActiveDirectoryVariableName}(\\s+(${Constants.AzureActiveDirectoryForceNewOption}))?(\\s+(ppe|public|cn|de|us))?(\\s+([^\\.]+\\.[^\\}\\s]+|[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}))?(\\s+aud:([^\\.]+\\.[^\\}\\s]+|[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}))?\\s*`);
 
     private static _instance: SystemVariableProvider;
+
+    private readonly _settings: RestClientSettings = RestClientSettings.Instance;
 
     public static get Instance(): SystemVariableProvider {
         if (!SystemVariableProvider._instance) {
@@ -116,7 +119,7 @@ export class SystemVariableProvider implements HttpVariableProvider {
             const groups = this.envIfRegex.exec(name);
             if (groups !== null && groups.length === 4) {
                 const [, envName, value1, value2] = groups;
-                if (envName === currentEnv.name) {
+                if (envName === currentEnv.name || envName in this._settings.environmentVariables[currentEnv.name]) {
                     return { value: value1};
                 } else {
                     return { value: value2};

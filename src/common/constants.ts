@@ -1,6 +1,6 @@
 'use strict';
 
-export const ExtensionId: string = 'humao.rest-client';
+export const ExtensionId: string = 'cat.rest-client';
 export const AiKey: string = 'ad746e27-4a36-441c-8b94-5db178f81ae3';
 export const CSSFileName: string = 'rest-client.css';
 export const CSSFolderName: string = 'styles';
@@ -8,7 +8,7 @@ export const ScriptFileName: string = 'main.js';
 export const ScriptsFolderName: string = 'scripts';
 export const ImagesFolderName: string = 'images';
 export const IconFileName: string = 'rest_icon.png';
-export const ExtensionFolderName: string = '.rest-client';
+export const ExtensionFolderName: string = '.hclient';
 export const HistoryFileName: string = 'history.json';
 export const CookieFileName: string = 'cookie.json';
 export const EnvironmentFileName: string = 'environment.json';
