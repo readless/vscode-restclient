@@ -5,4 +5,5 @@ export enum VariableType {
     File,
     Request,
     System,
+    Dir,
 }

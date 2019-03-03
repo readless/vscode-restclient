@@ -1,6 +1,7 @@
 'use strict';
 
 import { CancellationToken, Hover, HoverProvider, MarkdownString, MarkedString, Position, TextDocument } from 'vscode';
+import { DirVariableProvider } from '../utils/httpVariableProviders/dirVariableProvider';
 import { EnvironmentVariableProvider } from '../utils/httpVariableProviders/environmentVariableProvider';
 import { FileVariableProvider } from '../utils/httpVariableProviders/fileVariableProvider';
 import { VariableUtility } from '../utils/variableUtility';
@@ -19,6 +20,16 @@ export class CustomVariableHoverProvider implements HoverProvider {
             const { name, value, error, warning } = await FileVariableProvider.Instance.get(document, selectedVariableName);
             if (!warning && !error) {
                 const contents: MarkedString[] = [value as string, new MarkdownString(`*File Variable* \`${name}\``)];
+                return new Hover(contents, wordRange);
+            }
+
+            return;
+        }
+
+        if (await DirVariableProvider.Instance.has(document, selectedVariableName)) {
+            const { name, value, error, warning } = await DirVariableProvider.Instance.get(document, selectedVariableName);
+            if (!warning && !error) {
+                const contents: MarkedString[] = [value as string, new MarkdownString(`*Dir Variable* \`${name}\``)];
                 return new Hover(contents, wordRange);
             }
 

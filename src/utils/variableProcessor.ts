@@ -2,6 +2,7 @@
 
 import { TextDocument, window } from 'vscode';
 import { VariableType } from "../models/variableType";
+import { DirVariableProvider } from './httpVariableProviders/dirVariableProvider';
 import { EnvironmentVariableProvider } from './httpVariableProviders/environmentVariableProvider';
 import { FileVariableProvider } from './httpVariableProviders/fileVariableProvider';
 import { HttpVariableProvider } from './httpVariableProviders/httpVariableProvider';
@@ -14,6 +15,7 @@ export class VariableProcessor {
         [SystemVariableProvider.Instance, false],
         [RequestVariableProvider.Instance, true],
         [FileVariableProvider.Instance, true],
+        [DirVariableProvider.Instance, false],
         [EnvironmentVariableProvider.Instance, true],
     ];
 
@@ -56,11 +58,11 @@ export class VariableProcessor {
     }
 
     public static async getAllVariablesDefinitions(document: TextDocument): Promise<Map<string, VariableType[]>> {
-        const [, [requestProvider], [fileProvider], [environmentProvider]] = VariableProcessor.providers;
+        const [, [requestProvider], [fileProvider], [dirVariableProvider], [environmentProvider]] = VariableProcessor.providers;
         const requestVariables = await (requestProvider as RequestVariableProvider).getAll(document);
         const fileVariables = await (fileProvider as FileVariableProvider).getAll(document);
         const environmentVariables = await (environmentProvider as EnvironmentVariableProvider).getAll(document);
-
+        const dirVariables = await (dirVariableProvider as DirVariableProvider).getAll(document);
         const variableDefinitions = new Map<string, VariableType[]>();
 
         // Request variables in file
@@ -78,6 +80,15 @@ export class VariableProcessor {
                 variableDefinitions.get(name).push(VariableType.File);
             } else {
                 variableDefinitions.set(name, [VariableType.File]);
+            }
+        });
+
+        // Dir variables
+        dirVariables.forEach(({ name }) => {
+            if (variableDefinitions.has(name)) {
+                variableDefinitions.get(name).push(VariableType.Dir);
+            } else {
+                variableDefinitions.set(name, [VariableType.Dir]);
             }
         });
 
