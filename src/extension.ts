@@ -56,6 +56,13 @@ export async function activate(context: ExtensionContext) {
         });
     }));
 
+    const requestReadDb = {"requestBaseData":{"extParameterList":[{"key":"DataSource", "value":"db"}]}};
+    const requestResetCache = {"requestBaseData":{"extParameterList":[{"key":"resetCache", "value":"true"}]}};
+
+    context.subscriptions.push(commands.registerCommand('rest-client.request-read-db', ((document: TextDocument, range: Range) => requestController.run(range, requestReadDb))));
+    context.subscriptions.push(commands.registerCommand('rest-client.request-reset-cache', ((document: TextDocument, range: Range) => requestController.run(range, requestResetCache))));
+
+
     const documentSelector = [
         { language: 'http', scheme: 'file' },
         { language: 'http', scheme: 'untitled' },

@@ -52,7 +52,7 @@ export class RequestController {
     }
 
     @trace('Request')
-    public async run(range: Range) {
+    public async run(range: Range, additionRequestData: Object = null) {
         const editor = window.activeTextEditor;
         const document = getCurrentTextDocument();
         if (!editor || !document) {
@@ -88,11 +88,47 @@ export class RequestController {
             return;
         }
 
+        if (additionRequestData) {
+            this.addRequestData(httpRequest, additionRequestData);
+        }
+
         if (requestVariable) {
             httpRequest.requestVariableCacheKey = new RequestVariableCacheKey(requestVariable, document.uri.toString());
         }
 
         await this.runCore(httpRequest);
+    }
+ 
+    public addRequestData(httpRequest: HttpRequest, obj: Object) {
+        if (typeof httpRequest.body !== 'string') {
+            return;
+        }
+        try {
+            let bodyStr:string = (httpRequest.body as string);
+            let bodyJsonObj = JSON.parse(bodyStr);
+            this.mergeObject(bodyJsonObj, obj);
+            httpRequest.body = JSON.stringify(bodyJsonObj);
+        } catch (e) {
+            return;
+        }
+    }
+
+    private mergeObject(targetObj: Object, srcObj: Object) {
+        for (var key in srcObj) {
+            let targetValue = targetObj[key];
+            if (targetValue) {
+                if (targetValue instanceof Array) {
+                    targetValue.push(srcObj[key]);
+                } else if (typeof targetValue === 'object') {
+                    this.mergeObject(targetValue, srcObj[key]);
+                    targetObj[key] = targetValue;
+                } else {
+                    targetObj[key] = srcObj[key];
+                }
+            } else {
+                targetObj[key] = srcObj[key];
+            }
+        }
     }
 
     @trace('Rerun Request')
