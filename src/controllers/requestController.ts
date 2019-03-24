@@ -116,17 +116,22 @@ export class RequestController {
     private mergeObject(targetObj: Object, srcObj: Object) {
         for (var key in srcObj) {
             let targetValue = targetObj[key];
+            let srcValue = srcObj[key];
             if (targetValue) {
                 if (targetValue instanceof Array) {
-                    targetValue.push(srcObj[key]);
+                    if (srcValue instanceof Array) {
+                        targetValue.push(...srcValue);
+                    } else {
+                        targetObj[key] = srcValue;
+                    }
                 } else if (typeof targetValue === 'object') {
-                    this.mergeObject(targetValue, srcObj[key]);
+                    this.mergeObject(targetValue, srcValue);
                     targetObj[key] = targetValue;
                 } else {
-                    targetObj[key] = srcObj[key];
+                    targetObj[key] = srcValue;
                 }
             } else {
-                targetObj[key] = srcObj[key];
+                targetObj[key] = srcValue;
             }
         }
     }
