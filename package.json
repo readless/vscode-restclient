@@ -167,6 +167,16 @@
                 "command": "rest-client.unfold-response",
                 "title": "Unfold Response",
                 "category": "Rest Client"
+            },
+            {
+                "command": "rest-client.request-read-db",
+                "title": "Request Read Db",
+                "category": "Rest Client"
+            },
+            {
+                "command": "rest-client.request-reset-cache",
+                "title": "Request Reset Cache",
+                "category": "Rest Client"
             }
         ],
         "menus": {
@@ -232,14 +242,24 @@
                     "group": "rest-client@1"
                 },
                 {
-                    "command": "rest-client.generate-codesnippet",
+                    "command": "rest-client.request-read-db",
                     "when": "editorTextFocus && editorLangId == http",
                     "group": "rest-client@2"
                 },
                 {
-                    "command": "rest-client.copy-request-as-curl",
+                    "command": "rest-client.request-reset-cache",
                     "when": "editorTextFocus && editorLangId == http",
                     "group": "rest-client@3"
+                },
+                {
+                    "command": "rest-client.generate-codesnippet",
+                    "when": "editorTextFocus && editorLangId == http",
+                    "group": "rest-client@4"
+                },
+                {
+                    "command": "rest-client.copy-request-as-curl",
+                    "when": "editorTextFocus && editorLangId == http",
+                    "group": "rest-client@5"
                 }
             ]
         },
