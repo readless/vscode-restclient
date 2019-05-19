@@ -38,6 +38,7 @@ export interface IRestClientSettings {
     expandJsonStrAsJsonObject: boolean;
     enableSendRequestCodeLens: boolean;
     enableCustomVariableReferencesCodeLens: boolean;
+    previewHeaders: string[];
 }
 
 export class RestClientSettings implements IRestClientSettings {
@@ -73,6 +74,7 @@ export class RestClientSettings implements IRestClientSettings {
     public enableSendRequestCodeLens: boolean;
     public enableCustomVariableReferencesCodeLens: boolean;
 
+    public previewHeaders: string[];
     private readonly brackets: CharacterPair[];
 
     private static _instance: RestClientSettings;
@@ -153,6 +155,7 @@ export class RestClientSettings implements IRestClientSettings {
         const httpSettings = workspace.getConfiguration("http");
         this.proxy = httpSettings.get<string>('proxy', undefined);
         this.proxyStrictSSL = httpSettings.get<boolean>('proxyStrictSSL', false);
+        this.previewHeaders = restClientSettings.get<string[]>("previewHeaders", []);
     }
 
     private parseColumn(value: string): ViewColumn {

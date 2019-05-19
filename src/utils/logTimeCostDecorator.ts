@@ -1,5 +1,7 @@
 'use strict';
 import {Logger} from './logger';
+import { RestClientSettings } from '../models/configurationSettings';
+import { LogLevel } from '../models/loglevel';
 
 export function logTime(funcName: string): MethodDecorator {
     return (target, propertyKey: string | symbol, descriptor: PropertyDescriptor) => {
@@ -13,7 +15,9 @@ export function logTime(funcName: string): MethodDecorator {
             let start = new Date().getTime();
             let ret = originalMethod.apply(this, args);
             let end = new Date().getTime();
-            Logger.Instance.log(funcName + " cost: " + (end - start) + " ms");
+            if (RestClientSettings.Instance.logLevel === LogLevel.Verbose) {
+                Logger.Instance.log(funcName + " cost: " + (end - start) + " ms");
+            }
             return ret;
         };
 

@@ -14,6 +14,7 @@ import { MimeUtility } from '../utils/mimeUtility';
 import { isJSONString } from '../utils/misc';
 import { ResponseFormatUtility } from '../utils/responseFormatUtility';
 import { BaseWebview } from './baseWebview';
+import { RestClientSettings } from '../models/configurationSettings';
 
 const hljs = require('highlight.js');
 
@@ -310,8 +311,9 @@ ${HttpResponseWebview.formatHeaders(response.headers)}`;
 
     private static formatHeaders(headers: Headers): string {
         let headerString = '';
+        let showHeaderNames = RestClientSettings.Instance.previewHeaders;
         for (let header in headers) {
-            if (headers.hasOwnProperty(header)) {
+            if (headers.hasOwnProperty(header) && (showHeaderNames.length === 0 || showHeaderNames.includes(header))) {
                 let value = headers[header];
                 if (typeof headers[header] !== 'string') {
                     value = <string>headers[header];
