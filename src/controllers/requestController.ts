@@ -52,7 +52,7 @@ export class RequestController {
     }
 
     @trace('Request')
-    public async run(range: Range, additionRequestData: Object = null) {
+    public async run(range: Range, additionRequestData: Object = null, additionHeaderData: Object = null) {
         const editor = window.activeTextEditor;
         const document = getCurrentTextDocument();
         if (!editor || !document) {
@@ -92,6 +92,10 @@ export class RequestController {
             this.addRequestData(httpRequest, additionRequestData);
         }
 
+        if (additionHeaderData) {
+            this.addRequestHeader(httpRequest, additionHeaderData);
+        }
+
         if (requestVariable) {
             httpRequest.requestVariableCacheKey = new RequestVariableCacheKey(requestVariable, document.uri.toString());
         }
@@ -110,6 +114,15 @@ export class RequestController {
             httpRequest.body = JSON.stringify(bodyJsonObj);
         } catch (e) {
             return;
+        }
+    }
+
+    public addRequestHeader(httpRequest: HttpRequest, obj: Object) {
+        if (typeof httpRequest.body !== 'string') {
+            return;
+        }
+        for (const key in obj) {
+            httpRequest.headers[key]= obj[key]; 
         }
     }
 

@@ -59,8 +59,11 @@ export async function activate(context: ExtensionContext) {
     const requestReadDb = {"requestBaseData":{"extParameterList":[{"key":"DataSource", "value":"db"}]}};
     const requestResetCache = {"requestBaseData":{"extParameterList":[{"key":"resetCache", "value":"true"}]}};
 
-    context.subscriptions.push(commands.registerCommand('rest-client.request-read-db', ((document: TextDocument, range: Range) => requestController.run(range, requestReadDb))));
-    context.subscriptions.push(commands.registerCommand('rest-client.request-reset-cache', ((document: TextDocument, range: Range) => requestController.run(range, requestResetCache))));
+    const requestReadDbHeader = {"X-Cache-Config":"skipCache"};
+    const requestResetCacheHeader = {"X-Cache-Config":"resetCache"};
+
+    context.subscriptions.push(commands.registerCommand('rest-client.request-read-db', ((document: TextDocument, range: Range) => requestController.run(range, requestReadDb, requestReadDbHeader))));
+    context.subscriptions.push(commands.registerCommand('rest-client.request-reset-cache', ((document: TextDocument, range: Range) => requestController.run(range, requestResetCache, requestResetCacheHeader))));
 
 
     const documentSelector = [
