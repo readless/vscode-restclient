@@ -2,7 +2,7 @@
     "name": "rest-client",
     "displayName": "HClient",
     "description": "HClient for Visual Studio Code",
-    "version": "1.1.27",
+    "version": "1.1.28",
     "publisher": "cat",
     "author": {
         "name": "readless",

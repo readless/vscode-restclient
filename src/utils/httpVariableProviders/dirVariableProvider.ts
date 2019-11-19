@@ -35,7 +35,7 @@ export class DirVariableProvider implements HttpVariableProvider {
             if (dirName === workSpaceParentDir) {
                 break;
             }
-            let confFileName = dirName + "\\@var.conf";
+            let confFileName = dirName + path.sep + "@var.conf";
             if (!fs.existsSync(confFileName)) {
                 continue;
             }
@@ -60,7 +60,7 @@ export class DirVariableProvider implements HttpVariableProvider {
             if (dirName === workSpaceParentDir) {
                break;
             }
-            let confFileName = dirName + "\\@var.conf";
+            let confFileName = dirName + path.sep + "@var.conf";
             if (!fs.existsSync(confFileName)) {
                 continue;
             }
@@ -87,7 +87,7 @@ export class DirVariableProvider implements HttpVariableProvider {
             if (dirName === workSpaceParentDir) {
                 break;
             }
-            let confFileName = dirName + "\\@var.conf";
+            let confFileName = dirName + path.sep + "@var.conf";
             if (!fs.existsSync(confFileName)) {
                 continue;
             }
