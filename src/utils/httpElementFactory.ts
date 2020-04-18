@@ -118,6 +118,12 @@ export class HttpElementFactory {
             Constants.EnvIfDescription,
             new SnippetString(`{{$\${name:${Constants.EnvIfVariableName.slice(1)}} \${1:envName} \${2:value1} \${3:value2}}}`)));
         originalElements.push(new HttpElement(
+            Constants.JsonStrFromFileVariableName,
+            ElementType.SystemVariable,
+            null,
+            Constants.JsonStrFromFileDescription,
+            new SnippetString(`{{$\${name:${Constants.JsonStrFromFileVariableName.slice(1)}} \${1:filePath}}}`)));
+        originalElements.push(new HttpElement(
             Constants.AzureActiveDirectoryVariableName,
         ElementType.SystemVariable,
             null,

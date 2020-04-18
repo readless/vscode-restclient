@@ -12,6 +12,9 @@ import { VariableType } from '../../models/variableType';
 import { AadTokenCache } from '../aadTokenCache';
 import { HttpClient } from '../httpClient';
 import { HttpVariableContext, HttpVariableProvider, HttpVariableValue } from './httpVariableProvider';
+import { getCurrentTextDocument } from '../workspaceUtility';
+import { HttpRequestParser } from '../httpRequestParser';
+import * as fs from 'fs-extra';
 
 const uuidv4 = require('uuid/v4');
 
@@ -27,6 +30,7 @@ export class SystemVariableProvider implements HttpVariableProvider {
     private readonly datetimeRegex: RegExp = new RegExp(`\\${Constants.DateTimeVariableName}\\s(rfc1123|iso8601)(?:\\s(\\-?\\d+)\\s(y|Q|M|w|d|h|m|s|ms))?`);
     private readonly randomIntegerRegex: RegExp = new RegExp(`\\${Constants.RandomIntVariableName}\\s(\\-?\\d+)\\s(\\-?\\d+)`);
     private readonly envIfRegex: RegExp = new RegExp(`\\${Constants.EnvIfVariableName}\\s(\\S+)\\s(\\S+)\\s(\\S+)`);
+    private readonly jsonStrFromFileRegex: RegExp = new RegExp(`\\${Constants.JsonStrFromFileVariableName}\\s+(.*)`);
 
     private readonly requestUrlRegex: RegExp = /^(?:[^\s]+\s+)([^:]*:\/\/\/?[^/\s]*\/?)/;
 
@@ -52,6 +56,7 @@ export class SystemVariableProvider implements HttpVariableProvider {
         this.registerRandomIntVariable();
         this.registerAadTokenVariable();
         this.registerEnvIfVariable();
+        this.registerJsonStrFromFileVariable();
     }
 
     public readonly type: VariableType = VariableType.System;
@@ -127,6 +132,24 @@ export class SystemVariableProvider implements HttpVariableProvider {
             }
 
             return { warning: ResolveWarningMessage.IncorrectEnvIfVariableFormat };
+        });
+    }
+
+    private registerJsonStrFromFileVariable() {
+        this.resolveFuncs.set(Constants.JsonStrFromFileVariableName, async name => {
+            const groups = this.jsonStrFromFileRegex.exec(name);
+            if (groups === null || groups.length !== 2) {
+                return { warning: ResolveWarningMessage.IncorrectJsonStrFromFileFormat };
+            }
+            let jsonFilePath = groups[1];
+            let requestFileAbsolutePath = getCurrentTextDocument().fileName;
+            let jsonFileAbsolutePath = HttpRequestParser.resolveFilePath(jsonFilePath, requestFileAbsolutePath);
+            if (jsonFileAbsolutePath == null) {
+                return { warning: "file not exist:" + jsonFilePath};
+            }
+            let jsonFileContent = fs.readFileSync(jsonFileAbsolutePath, "UTF-8");
+            let result = JSON.stringify(JSON.stringify(JSON.parse(jsonFileContent)));
+            return { value:  result};
         });
     }
 

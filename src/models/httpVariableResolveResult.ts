@@ -37,5 +37,6 @@ export const enum ResolveWarningMessage {
     InvalidJSONPath = 'Invalid JSONPath query',
     InvalidXPath = 'Invalid XPath query',
     IncorrectEnvIfVariableFormat = 'EnvIf system variable should follow format "{{$envIf envName value1 value2}}"',
+    IncorrectJsonStrFromFileFormat = 'JsonStrFromFile system variable should follow format "{{$jsonStrFromFile filePath}}"',
 
 }

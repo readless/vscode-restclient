@@ -29,6 +29,8 @@ export const RandomIntVariableName = "$randomInt";
 export const RandomIntDescription = "Returns a random integer between min (included) and max (excluded)";
 export const EnvIfVariableName = "$envIf";
 export const EnvIfDescription = "return value1 if current env is envName， otherwise return value2";
+export const JsonStrFromFileVariableName = "$jsonStrFromFile";
+export const JsonStrFromFileDescription = "return json str from file content";
 
 export const AzureActiveDirectoryVariableName = "$aadToken";
 export const AzureActiveDirectoryDescription = "Prompts to sign in to Azure AD and adds the token to the request";

@@ -10,6 +10,7 @@ import { getWorkspaceRootPath } from '../utils/workspaceUtility';
 export class RequestBodyDocumentLinkProvider implements DocumentLinkProvider {
 
     private _linkPattern = /^(\<\s+)(\S+)(\s*)$/g;
+    private jsonFromFileVarPattern = /^(.*\$jsonStrFromFile\s+)(.*)}}\s*$/g;
 
     public provideDocumentLinks(document: TextDocument, _token: CancellationToken): DocumentLink[] {
         const results: DocumentLink[] = [];
@@ -21,6 +22,15 @@ export class RequestBodyDocumentLinkProvider implements DocumentLinkProvider {
             let line = lines[index];
             let match: RegExpMatchArray;
             if (match = this._linkPattern.exec(line)) {
+                let filePath = match[2];
+                const offset = match[1].length;
+                const linkStart = new Position(index, offset);
+                const linkEnd = new Position(index, offset + filePath.length);
+                results.push(new DocumentLink(
+                    new Range(linkStart, linkEnd),
+                    this.normalizeLink(document, filePath, base)
+                ));
+            } else if (match = this.jsonFromFileVarPattern.exec(line)) {
                 let filePath = match[2];
                 const offset = match[1].length;
                 const linkStart = new Position(index, offset);

@@ -192,7 +192,7 @@ export class HttpRequestParser implements IRequestParser {
         return MimeUtility.isMultiPartFormData(contentTypeHeader) ? '\r\n' : EOL;
     }
 
-    private static resolveFilePath(refPath: string, httpFilePath: string): string {
+    public static resolveFilePath(refPath: string, httpFilePath: string): string {
         if (path.isAbsolute(refPath)) {
             return fs.existsSync(refPath) ? refPath : null;
         }
